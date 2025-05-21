@@ -24,6 +24,7 @@ model Websites {
   id      String  @id @default(uuid())
   url    String
   userId  String
+  disabled  Boolean @default(false)
   ticks  WebsiteTick[]
 }
 

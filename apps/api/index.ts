@@ -22,15 +22,50 @@ app.post("/api/v1/website", authMiddleware, async (req: Request, res: Response) 
 
 })
 
-app.get("/api/v1/website/status", authMiddleware, (req: Request, res: Response) => {
+app.get("/api/v1/website/status", authMiddleware, async (req: Request, res: Response) => {
+    const websiteId = req.query.websiteId as string;
+    const userId = req.userId;
 
+    const data = await prismaClient.websites.findFirst({
+        where: {
+            id: websiteId,
+            userId
+        },
+        include: {
+            ticks: true
+        }
+    })
+
+    res.json(data)
 })
 
-app.get("/api/v1/websites",authMiddleware, (req: Request, res: Response) => {
+app.get("/api/v1/websites",authMiddleware, async(req: Request, res: Response) => {
+    const userId = req.userId;
 
+    const websites = await prismaClient.websites.findMany({
+        where: {
+            userId,
+            disabled: false
+        }
+    })
+
+    res.json({
+        websites
+    })
 })
 
-app.delete("/api/v1/website",authMiddleware, (req: Request, res: Response) => {
+app.delete("/api/v1/website",authMiddleware, async (req: Request, res: Response) => {
+    const userId = req.userId;
+    const websiteId = req.query.website as string;
 
+    const data = await prismaClient.websites.update({
+        where: {
+            id: websiteId,
+            userId
+        },
+        data: {
+            disabled: true
+        }
+    })
 })
 app.listen(3000);
