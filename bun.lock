@@ -13,6 +13,7 @@
       "name": "api",
       "dependencies": {
         "@types/express": "^5.0.2",
+        "db": "*",
         "express": "^5.1.0",
       },
       "devDependencies": {
