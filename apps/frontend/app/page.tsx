@@ -94,9 +94,9 @@ export default function Home() {
                   <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-purple-600 to-blue-600"></div>
                   <div className="p-1">
                     <img
-                      src="/placeholder.svg?height=600&width=1000"
+                      src="/hero-ss.png"
                       alt="Monitr dashboard preview"
-                      className="rounded-xl"
+                      className="rounded-md"
                     />
                   </div>
                 </div>
@@ -142,7 +142,7 @@ export default function Home() {
                   Features
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-light tracking-tight mb-4">
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">
                 Everything you need for reliable monitoring
               </h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
@@ -216,7 +216,7 @@ export default function Home() {
                   How it works
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-light tracking-tight mb-4">How Monitr works</h2>
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">How Monitr works</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
                 Setting up monitoring for your websites takes less than 5 minutes.
               </p>
@@ -280,7 +280,7 @@ export default function Home() {
                   Pricing
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-light tracking-tight mb-4">Simple, transparent pricing</h2>
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">Simple, transparent pricing</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
                 Choose the plan that fits your monitoring needs. All plans include our core features.
               </p>
@@ -389,7 +389,7 @@ export default function Home() {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-black/5 text-sm font-light mb-4">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">FAQ</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-light tracking-tight mb-4">Frequently asked questions</h2>
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">Frequently asked questions</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
                 Find answers to common questions about Monitr.
               </p>
@@ -424,7 +424,7 @@ export default function Home() {
                 },
               ].map((faq, index) => (
                 <div key={index} className="py-6 group cursor-pointer">
-                  <h3 className="text-lg font-light mb-2 flex justify-between items-center">
+                  <h3 className="text-lg font-medium mb-2 flex justify-between items-center">
                     {faq.question}
                     <span className="h-6 w-6 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:border-gray-300 transition-colors">
                       +
@@ -449,7 +449,7 @@ export default function Home() {
         <div className="container mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-sm font-medium mb-4">Product</h3>
+              <h3 className="text-sm font-medium mb-4 text-black">Product</h3>
               <ul className="space-y-2">
                 <li>
                   <Link href="#" className="text-sm font-light text-gray-600 hover:text-gray-900">
@@ -474,7 +474,7 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-medium mb-4">Resources</h3>
+              <h3 className="text-sm font-medium mb-4 text-black">Resources</h3>
               <ul className="space-y-2">
                 <li>
                   <Link href="#" className="text-sm font-light text-gray-600 hover:text-gray-900">
@@ -499,7 +499,7 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-medium mb-4">Company</h3>
+              <h3 className="text-sm font-medium mb-4 text-black">Company</h3>
               <ul className="space-y-2">
                 <li>
                   <Link href="#" className="text-sm font-light text-gray-600 hover:text-gray-900">
@@ -524,7 +524,7 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-medium mb-4">Legal</h3>
+              <h3 className="text-sm font-medium mb-4 text-black">Legal</h3>
               <ul className="space-y-2">
                 <li>
                   <Link href="#" className="text-sm font-light text-gray-600 hover:text-gray-900">
