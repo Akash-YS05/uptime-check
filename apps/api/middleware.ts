@@ -1,12 +1,8 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import type { NextFunction, Request, Response } from "express";
 
-export default clerkMiddleware();
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+    const header = req.headers["authorization"];
 
-export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
-  ],
-};
+    req.userId = "10"    //hardcoded as of now
+    next();
+}

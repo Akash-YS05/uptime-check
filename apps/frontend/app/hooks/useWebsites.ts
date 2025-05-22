@@ -21,7 +21,7 @@ interface Website {
 
 export function useWebsites() {
     const {getToken} = useAuth();
-    const [website, setWebsite] = useState<Website[]>([]);
+    const [websites, setWebsites] = useState<Website[]>([]);
 
     async function refreshWebsites() {
         const token = getToken();
@@ -31,7 +31,7 @@ export function useWebsites() {
             }
         })
 
-        setWebsite(response.data.websites);
+        setWebsites(response.data.websites);
     }
 
     useEffect(() => {
@@ -43,5 +43,5 @@ export function useWebsites() {
         return () => clearInterval(interval)
     }, [])
 
-    return website;
+    return {websites, refreshWebsites};
 }

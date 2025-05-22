@@ -2,6 +2,10 @@
   "name": "db",
   "module": "index.ts",
   "type": "module",
+  "prisma": {
+  "seed": "ts-node prisma/seed.ts"
+},
+
   "exports": {
     "./client": "./src/index.ts"
   },

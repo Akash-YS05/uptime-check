@@ -1,7 +1,11 @@
+"use client"
+
 import Link from "next/link"
 import { CheckIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="min-h-screen flex flex-col">
       {/* <header className="py-6 px-4 sm:px-6 lg:px-8 border-b backdrop-blur-sm bg-white/70 sticky top-0 z-50">
@@ -39,7 +43,7 @@ export default function Home() {
 
       <main className="flex-1 text-black">
         {/* Hero Section */}
-        <section className="relative py-20 lg:py-32 overflow-hidden">
+        <section className="relative py-20 lg:py-20 overflow-hidden">
           <div className="absolute inset-0 -z-10 overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-50 to-white"></div>
             <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-100 rounded-full opacity-50 blur-3xl"></div>
@@ -67,8 +71,11 @@ export default function Home() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
                   <Link
-                    href="#"
+                    href="/dashboard"
                     className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 font-light text-sm hover:opacity-90 transition-all shadow-lg shadow-blue-600/20 text-white"
+                    onClick={() => {
+                      router.push('/dashboard')
+                    }}
                   >
                     Start monitoring
                   </Link>

@@ -10,8 +10,11 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
+    "cors": "^2.8.5",
+    "db": "*",
     "express": "^5.1.0",
-    "db": "*"
+    "nodemon": "^3.1.10"
   }
 }
