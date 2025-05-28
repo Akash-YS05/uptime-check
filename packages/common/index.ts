@@ -29,7 +29,7 @@ export interface ValidateOutgoingMessage {
 }
 
 export type IncomingMessage = {
-    type: 'singup'
+    type: 'signup'
     data: SignupIncomingMessage
 } | {
     type: 'validate'
