@@ -1,5 +1,5 @@
 {
-  "name": "hub",
+  "name": "common",
   "module": "index.ts",
   "type": "module",
   "private": true,
@@ -8,10 +8,5 @@
   },
   "peerDependencies": {
     "typescript": "^5"
-  },
-  "dependencies": {
-    "@solana/kit": "^2.1.1",
-    "@solana/web3.js": "^1.98.2",
-    "tweetnacl": "^1.0.3"
   }
 }

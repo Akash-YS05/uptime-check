@@ -43,7 +43,7 @@ app.get("/api/v1/website/status", authMiddleware, async (req: Request, res: Resp
     res.json(data)
 })
 
-app.get("/api/v1/websites", async(req: Request, res: Response) => {
+app.get("/api/v1/websites", authMiddleware, async(req: Request, res: Response) => {
     const userId = req.userId;
 
     const websites = await prismaClient.websites.findMany({
