@@ -14,7 +14,7 @@ const availableValidators: {
 const CALLBACKS: { [callbackId: string] : (data: IncomingMessage) => void } = {};   //this is a globally maintained CALLBACK object that stores the callbacks for each callbackId
 const COST_PER_VALIDATION = 100;    //in lamports (1 lamport = 0.000000001 SOL)
 
-
+//websocket handler
 Bun.serve({
     fetch(req, server) {
         if (server.upgrade(req)) {
@@ -100,8 +100,13 @@ async function signuphandler(ws: ServerWebSocket<unknown>, { ip, publicKey, sign
     })
 }
 
+
+//used to verify the signed message from the validator
 async function verifyMessage(message: string, publicKey: string, signature: string) {
     const messageBytes = nacl_util.decodeUTF8(message);
+
+    //the below function takes the message, the signed gibberish and the public key of the validator and verifies if the signature is valid or not for the specific public key
+
     const result = nacl.sign.detached.verify(
         messageBytes,
         new Uint8Array(JSON.parse(signature)),  //Uint8Array because nacl expects the signature to be in Uint8Array format
@@ -111,6 +116,8 @@ async function verifyMessage(message: string, publicKey: string, signature: stri
     return result
 }
 
+
+//we are getting all websites in the db for the user and we send those websites to all validators who validate the websites and send the result back to us
 setInterval(async () => {
     const websitetoMonitor = await prismaClient.websites.findMany({
         where: {
@@ -142,6 +149,7 @@ setInterval(async () => {
                         return;
                     }
 
+                    //this is  atransaction i.e we are creating a tick for the website and updating the validator's pending payouts in a single transaction (we want both operations to succeed or neither one of them)
                     await prismaClient.$transaction(async (tx) => {
                         await tx.websiteTick.create({
                             data: {
@@ -155,7 +163,7 @@ setInterval(async () => {
 
                         await tx.validator.update({
                             where: {
-                                id: validatorId;
+                                id: validatorId
                             },
                             data: {
                                 pendingPayouts: {
