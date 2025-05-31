@@ -5,7 +5,7 @@ export interface SignupIncomingMessage {
     ip: string;
     publicKey :string;
     signedMessage: string;
-    callabackId: string
+    callbackId: string
 }
 
 export interface ValidateIncomingMessage {

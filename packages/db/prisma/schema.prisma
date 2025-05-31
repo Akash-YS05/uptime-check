@@ -30,9 +30,10 @@ model Websites {
 
 model Validator {
   id     String  @id @default(uuid())
-  publickKey String
+  publicKey String
   location String
   ip        String
+  pendingPayouts  Int @default(0)
   ticks   WebsiteTick[]
 
 }

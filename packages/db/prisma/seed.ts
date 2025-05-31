@@ -1,45 +1,61 @@
-import { prismaClient } from "../src";
 
+import { prismaClient } from "../src/index.ts";
+
+const USER_ID = "43";
 
 async function seed() {
-  const user = await prismaClient.user.create({
-    data: {
-        id: "10",
-      email: "user@example.com",
-    },
-  });
+    await prismaClient.user.create({
+        data: {
+            id: USER_ID,
+            email: "test@test.com",
+        }
+    })
 
-  const validator = await prismaClient.validator.create({
-    data: {
-      publickKey: "pubkey123",
-      location: "New York",
-      ip: "192.168.0.1",
-    },
-  });
+    const website = await prismaClient.websites.create({
+        data: {
+            url: "https://test.com",
+            userId: USER_ID
+        }
+    })
 
-  const website = await prismaClient.websites.create({
-    data: {
-      url: "https://example.com",
-      userId: user.id,
-      disabled: false,
-    },
-  });
+    const validator = await prismaClient.validator.create({
+        data: {
+            publicKey: "0x12341223123",
+            location: "Delhi",
+            ip: "127.0.0.1",
+            pendingPayouts: 0,
+        }
+    })
 
-  await prismaClient.websiteTick.create({
-    data: {
-      websiteId: website.id,
-      validatorId: validator.id,
-      status: "Good",
-      latency: 123.45,
-    },
-  });
+    await prismaClient.websiteTick.create({
+        data: {
+            websiteId: website.id,
+            status: "Good",
+            createdAt: new Date(),
+            latency: 100,
+            validatorId: validator.id
+        }
+    })
 
-  console.log("Seed successful");
+    await prismaClient.websiteTick.create({
+        data: {
+            websiteId: website.id,
+            status: "Good",
+            createdAt: new Date(Date.now() - 1000 * 60 *10),
+            latency: 100,
+            validatorId: validator.id
+        }
+    })
+
+    await prismaClient.websiteTick.create({
+        data: {
+            websiteId: website.id,
+            status: "Bad",
+            createdAt: new Date(Date.now() - 1000 * 60 * 20),
+            latency: 100,
+            validatorId: validator.id
+        }
+    })
 }
 
-seed()
-  .catch((e) => {
-    console.error("Error:", e);
-    process.exit(1);
-  })
-  .finally(() => prismaClient.$disconnect());
+seed();
