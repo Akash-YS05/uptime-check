@@ -27,7 +27,7 @@ async function main() {
     ws.onopen = async () => {
         console.log("Connected to hub server");
         
-        const callbackId = randomUUIDv7();
+        const callbackId = crypto.randomUUID();
         CALLBACKS[callbackId] = (data: SignupOutgoingMessage) => {
             validatorId = data.validatorId;
             console.log("Signed up with validator ID:", validatorId);
