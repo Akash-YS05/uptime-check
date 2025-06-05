@@ -1,4 +1,3 @@
-import { randomUUIDv7 } from "bun";
 import type { OutgoingMessage, SignupOutgoingMessage, ValidateOutgoingMessage } from "common/types";
 import { Keypair } from "@solana/web3.js";
 import nacl from "tweetnacl";
@@ -7,7 +6,13 @@ import nacl_util from "tweetnacl-util";
 const CALLBACKS: {[callbackId: string]: (data: SignupOutgoingMessage) => void} = {}
 
 let validatorId: string | null = null;
-
+Bun.serve({
+    port: Number(process.env.PORT) || 3000,
+    fetch(req) {
+      return new Response("Validator is running");
+    },
+  });
+  
 async function main() {
     console.log("Starting validator client...");
     
@@ -22,7 +27,7 @@ async function main() {
     
     console.log("Validator public key:", keypair.publicKey.toString());
     
-    const ws = new WebSocket("https://uptime-check.onrender.com");
+    const ws = new WebSocket("wss://uptime-check.onrender.com");
 
     ws.onopen = async () => {
         console.log("Connected to hub server");
