@@ -22,7 +22,7 @@ async function main() {
     
     console.log("Validator public key:", keypair.publicKey.toString());
     
-    const ws = new WebSocket("ws://localhost:8081");
+    const ws = new WebSocket("https://uptime-check.onrender.com");
 
     ws.onopen = async () => {
         console.log("Connected to hub server");

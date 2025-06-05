@@ -4,7 +4,6 @@ import { prismaClient } from "db/client";
 import { PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import nacl_util from "tweetnacl-util";
-import bs58 from "bs58";
 
 // Add graceful shutdown handling
 process.on('SIGINT', async () => {
@@ -31,7 +30,7 @@ Bun.serve({
       }
       return new Response("Upgrade failed", { status: 500 });
     },
-    port: 8081,
+    port: process.env.PORT || 8081,
     websocket: {
         async message(ws: ServerWebSocket<unknown>, message: string) {
             console.log("Received message:", message);
