@@ -1,4 +1,4 @@
-import { randomUUIDv7, type ServerWebSocket } from "bun";
+import { type ServerWebSocket } from "bun";
 import type { IncomingMessage, SignupIncomingMessage } from "common/types";
 import { prismaClient } from "db/client";
 import { PublicKey } from "@solana/web3.js";
@@ -172,7 +172,7 @@ setInterval(async () => {
         
         for (const website of batch) {
             availableValidators.forEach(validator => {
-                const callbackId = randomUUIDv7();
+                const callbackId = crypto.randomUUID();
                 console.log(`Sending validation request for ${website.url} to validator ${validator.validatorId}`);
                 
                 validator.socket.send(JSON.stringify({
