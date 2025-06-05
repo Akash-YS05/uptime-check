@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("hgello0")
+    res.send("test")
 })
 app.post("/api/v1/website", authMiddleware, async (req: Request, res: Response) => {
     const userId = req.userId!;
@@ -77,7 +77,7 @@ app.delete("/api/v1/website", authMiddleware, async (req: Request, res: Response
 
     res.json({ success: true })
 })
-
-app.listen(3001, () => {
-    console.log("API is running on port 3001");
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`API is running on ${PORT}`);
 })
