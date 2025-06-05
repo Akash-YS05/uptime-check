@@ -2,29 +2,24 @@ import { type Metadata } from 'next'
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
-import { Geist, Geist_Mono, Inter } from 'next/font/google'
+import { Inter, Bodoni_Moda } from 'next/font/google'
 import './globals.css'
 import Appbar from '@/components/Header'
 import { ThemeProvider } from '@/components/theme-provider'
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+
+const bodoni_moda = Bodoni_Moda({
+  subsets: ["latin"],
+  variable: "--font-bodoni-moda",
+  display: "swap",
 })
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
-
-
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 })
 
-export const metadata = {
-  title: "Monitr - Website Uptime Monitoring",
+export const metadata: Metadata = {
+  title: "Status - Website Uptime Monitoring",
   description: "Real-time alerts when your websites experience downtime",
 }
 
@@ -36,7 +31,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.variable} font-sans antialiased`}>
+        <body className={`${inter.variable} ${bodoni_moda.variable} font-sans antialiased`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

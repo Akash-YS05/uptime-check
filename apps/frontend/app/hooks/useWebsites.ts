@@ -3,7 +3,7 @@
 import { BACKEND_API_URL } from "@/config";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Website {
     id: string;
@@ -24,21 +24,21 @@ export function useWebsites() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    async function refreshWebsites() {
+    const refreshWebsites = useCallback(async () => {
         try {
             setError(null);
             const token = await getToken(); 
-            
+    
             if (!token) {
                 throw new Error('No authentication token available');
             }
-
+    
             const response = await axios.get(`${BACKEND_API_URL}/api/v1/websites`, {
                 headers: {
                     Authorization: token
                 }
             });
-
+    
             setWebsites(response.data.websites);
         } catch (err) {
             console.error('Error fetching websites:', err);
@@ -46,16 +46,18 @@ export function useWebsites() {
         } finally {
             setLoading(false);
         }
-    }
+    }, [getToken]);
+    
 
     useEffect(() => {
         refreshWebsites();
         const interval = setInterval(() => {
             refreshWebsites();
         }, 1000 * 60 * 1);
-
+    
         return () => clearInterval(interval);
-    }, []);
+    }, [refreshWebsites]);
+    
 
     return { websites, refreshWebsites, loading, error };
 }

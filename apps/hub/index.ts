@@ -4,6 +4,20 @@ import { prismaClient } from "db/client";
 import { PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import nacl_util from "tweetnacl-util";
+import bs58 from "bs58";
+
+// Add graceful shutdown handling
+process.on('SIGINT', async () => {
+    console.log('Shutting down gracefully...');
+    await prismaClient.$disconnect();
+    process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+    console.log('Shutting down gracefully...');
+    await prismaClient.$disconnect();
+    process.exit(0);
+});
 
 const availableValidators: { validatorId: string, socket: ServerWebSocket<unknown>, publicKey: string }[] = [];
 
@@ -118,9 +132,7 @@ async function verifyMessage(message: string, publicKey: string, signature: stri
     try {
         const messageBytes = nacl_util.decodeUTF8(message);
         
-        // parse the signature from JSON array format and convert to Uint8Array
-        // the below logic takes the message, the signed gibberish and the public key of the validator and verifies if the signature is valid or not for the specific public key
-
+        // Parse the signature from JSON array format and convert to Uint8Array
         const signatureArray = JSON.parse(signature);
         const signatureBytes = new Uint8Array(signatureArray);
         
@@ -137,7 +149,7 @@ async function verifyMessage(message: string, publicKey: string, signature: stri
     }
 }
 
-//we are getting all websites in the db for the user and we send those websites to all validators who validate the websites and send the result back to us, every minute
+// Monitor websites every minute with controlled concurrency
 setInterval(async () => {
     console.log(`Checking websites. Available validators: ${availableValidators.length}`);
     
@@ -154,68 +166,86 @@ setInterval(async () => {
 
     console.log(`Found ${websitesToMonitor.length} websites to monitor`);
 
-    for (const website of websitesToMonitor) {
-        availableValidators.forEach(validator => {
-            const callbackId = randomUUIDv7();
-            console.log(`Sending validation request for ${website.url} to validator ${validator.validatorId}`);
-            
-            validator.socket.send(JSON.stringify({
-                type: 'validate',
-                data: {
-                    url: website.url,
-                    websiteId: website.id, // Include websiteId
-                    callbackId
-                },
-            }));
+    // Process websites in batches to avoid overwhelming the database
+    const batchSize = 5;
+    for (let i = 0; i < websitesToMonitor.length; i += batchSize) {
+        const batch = websitesToMonitor.slice(i, i + batchSize);
+        
+        for (const website of batch) {
+            availableValidators.forEach(validator => {
+                const callbackId = randomUUIDv7();
+                console.log(`Sending validation request for ${website.url} to validator ${validator.validatorId}`);
+                
+                validator.socket.send(JSON.stringify({
+                    type: 'validate',
+                    data: {
+                        url: website.url,
+                        websiteId: website.id,
+                        callbackId
+                    },
+                }));
 
-            CALLBACKS[callbackId] = async (data: IncomingMessage) => {
-                if (data.type === 'validate') {
-                    console.log(`Received validation response for ${website.url}:`, data.data);
-                    
-                    const { validatorId, status, latency, signedMessage } = data.data;
-                    
-                    const verified = await verifyMessage(
-                        `Replying to ${callbackId}`,
-                        validator.publicKey,
-                        signedMessage
-                    );
-                    
-                    if (!verified) {
-                        console.log("Validation response signature verification failed");
-                        return;
+                CALLBACKS[callbackId] = async (data: IncomingMessage) => {
+                    if (data.type === 'validate') {
+                        console.log(`Received validation response for ${website.url}:`, data.data);
+                        
+                        const { validatorId, status, latency, signedMessage } = data.data;
+                        
+                        const verified = await verifyMessage(
+                            `Replying to ${callbackId}`,
+                            validator.publicKey,
+                            signedMessage
+                        );
+                        
+                        if (!verified) {
+                            console.log("Validation response signature verification failed");
+                            return;
+                        }
+
+                        console.log(`Storing validation result: ${website.url} - ${status} (${latency}ms)`);
+
+                        try {
+                            await prismaClient.$transaction(async (tx) => {
+                                await tx.websiteTick.create({
+                                    data: {
+                                        websiteId: website.id,
+                                        validatorId,
+                                        status,
+                                        latency,
+                                        createdAt: new Date(),
+                                    },
+                                });
+
+                                await tx.validator.update({
+                                    where: { id: validatorId },
+                                    data: {
+                                        pendingPayouts: { increment: COST_PER_VALIDATION },
+                                    },
+                                });
+                            }, {
+                                maxWait: 5000, // 5 seconds
+                                timeout: 10000, // 10 seconds
+                            });
+                        } catch (transactionError) {
+                            console.error(`Transaction failed for ${website.url}:`, transactionError);
+                            // Optionally, you could implement a retry mechanism here
+                        }
                     }
-
-                    console.log(`Storing validation result: ${website.url} - ${status} (${latency}ms)`);
-                     
-                    //this is  atransaction i.e we are creating a tick for the website and updating the validator's pending payouts in a single transaction (we want both operations to succeed or neither one of them)
-                    await prismaClient.$transaction(async (tx) => {
-                        await tx.websiteTick.create({
-                            data: {
-                                websiteId: website.id,
-                                validatorId,
-                                status,
-                                latency,
-                                createdAt: new Date(),
-                            },
-                        });
-
-                        await tx.validator.update({
-                            where: { id: validatorId },
-                            data: {
-                                pendingPayouts: { increment: COST_PER_VALIDATION },
-                            },
-                        });
-                    });
-                }
-            };
-            
-            // Set a timeout to clean up callbacks that don't get responses
-            setTimeout(() => {
-                if (CALLBACKS[callbackId]) {
-                    console.log(`Timeout for callback ${callbackId}`);
-                    delete CALLBACKS[callbackId];
-                }
-            }, 30000); // 30 second timeout
-        });
+                };
+                
+                // Set a timeout to clean up callbacks that don't get responses
+                setTimeout(() => {
+                    if (CALLBACKS[callbackId]) {
+                        console.log(`Timeout for callback ${callbackId}`);
+                        delete CALLBACKS[callbackId];
+                    }
+                }, 30000); // 30 second timeout
+            });
+        }
+        
+        // Small delay between batches to reduce database load
+        if (i + batchSize < websitesToMonitor.length) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
     }
 }, 60 * 1000);

@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { CheckIcon } from "lucide-react"
+import { CheckIcon, Github, Linkedin, TwitterIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -42,7 +43,6 @@ export default function Home() {
       </header> */}
 
       <main className="flex-1 text-black">
-        {/* Hero Section */}
         <section className="relative py-20 lg:py-20 overflow-hidden">
           <div className="absolute inset-0 -z-10 overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-50 to-white"></div>
@@ -59,20 +59,20 @@ export default function Home() {
                   <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
                   Website monitoring made simple
                 </div>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-extralight tracking-tight mb-6 leading-14">
-                  Know when your sites are {" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
-                    down
+                <h1 className="text-4xl sm:text-5xl leading-16 md:text-6xl font-extralight tracking-tight mb-6">
+                  Powering Reliable Web with {" "}
+                  <span className="text-transparent font-[Bodoni_Moda] bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+                  Validator-Driven {" "}
                   </span>
+                  Monitoring
                 </h1>
                 <p className="text-lg sm:text-xl font-light text-gray-600 mb-8">
-                  Monitr provides real-time alerts when your websites experience downtime, so you can fix issues before
-                  your users notice.
+                Community-powered uptime verification. Validators monitor websites, verify results with cryptographic signatures, and earn Solana for every valid check. Decentralized. Scalable. Rewarding.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
                   <Link
                     href="/dashboard"
-                    className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 font-light text-sm hover:opacity-90 transition-all shadow-lg shadow-blue-600/20 text-white"
+                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 font-light text-sm hover:opacity-90 transition-all shadow-lg shadow-blue-600/20 text-white"
                     onClick={() => {
                       router.push('/dashboard')
                     }}
@@ -81,26 +81,19 @@ export default function Home() {
                   </Link>
                   <Link
                     href="#"
-                    className="px-6 py-3 rounded-full border border-gray-200 text-sm font-light hover:bg-gray-50 transition-colors"
+                    className="px-6 py-3 rounded-lg border border-gray-200 text-sm font-light hover:bg-gray-50 transition-colors"
                   >
                     Learn more
                   </Link>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-500 font-light">
-                  <div className="flex -space-x-1">
-                    <div className="w-6 h-6 rounded-full bg-gray-300 border-2 border-white"></div>
-                    <div className="w-6 h-6 rounded-full bg-gray-400 border-2 border-white"></div>
-                    <div className="w-6 h-6 rounded-full bg-gray-500 border-2 border-white"></div>
-                  </div>
-                  <span>Join 2,000+ companies monitoring their sites</span>
-                </div>
+                
               </div>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 lg:hidden"></div>
                 <div className="relative bg-white rounded-2xl shadow-2xl shadow-blue-600/5 border border-gray-100 overflow-hidden">
-                  <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-purple-600 to-blue-600"></div>
+                  <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-purple-600 to-blue-600"></div>
                   <div className="p-1">
-                    <img
+                    <Image
                       src="/hero-ss.png"
                       alt="Monitr dashboard preview"
                       className="rounded-md"
@@ -149,7 +142,7 @@ export default function Home() {
                   Features
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">
+              <h2 className="text-3xl sm:text-4xl font-normal font-[Bodoni_Moda] tracking-tight mb-4">
                 Everything you need for reliable monitoring
               </h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
@@ -171,18 +164,18 @@ export default function Home() {
                   title: "Detailed Reports",
                   description: "Access comprehensive uptime reports and analytics to identify patterns.",
                 },
-                {
-                  title: "Status Pages",
-                  description: "Create public or private status pages to keep your users informed.",
-                },
-                {
-                  title: "SSL Monitoring",
-                  description: "Get alerted before your SSL certificates expire to prevent security warnings.",
-                },
-                {
-                  title: "API Access",
-                  description: "Integrate monitoring data directly into your existing tools and dashboards.",
-                },
+                // {
+                //   title: "Status Pages",
+                //   description: "Create public or private status pages to keep your users informed.",
+                // },
+                // {
+                //   title: "SSL Monitoring",
+                //   description: "Get alerted before your SSL certificates expire to prevent security warnings.",
+                // },
+                // {
+                //   title: "API Access",
+                //   description: "Integrate monitoring data directly into your existing tools and dashboards.",
+                // },
               ].map((feature, index) => (
                 <div
                   key={index}
@@ -199,7 +192,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How It Works Section */}
         <section
           id="how-it-works"
           className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50/80 backdrop-blur-sm relative overflow-hidden"
@@ -223,7 +215,7 @@ export default function Home() {
                   How it works
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">How Monitr works</h2>
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight font-[Bodoni_Moda] mb-4">How Status works</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
                 Setting up monitoring for your websites takes less than 5 minutes.
               </p>
@@ -266,7 +258,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Pricing Section */}
         <section id="pricing" className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="absolute inset-0 -z-10 overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-50 to-white"></div>
@@ -287,7 +278,7 @@ export default function Home() {
                   Pricing
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">Simple, transparent pricing</h2>
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight font-[Bodoni_Moda] mb-4">Simple, transparent pricing</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
                 Choose the plan that fits your monitoring needs. All plans include our core features.
               </p>
@@ -396,9 +387,9 @@ export default function Home() {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-black/5 text-sm font-light mb-4">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">FAQ</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4">Frequently asked questions</h2>
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4 font-[Bodoni_Moda]">Frequently asked questions</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
-                Find answers to common questions about Monitr.
+                Find answers to common questions about Status.
               </p>
             </div>
 
@@ -556,17 +547,20 @@ export default function Home() {
               © {new Date().getFullYear()} Monitr. All rights reserved.
             </div>
             <div className="flex space-x-6">
-              <Link href="#" className="text-gray-400 hover:text-gray-500">
+              <Link href="https://x.com/AkashPandeyTwT" className="text-gray-600 hover:text-gray-900">
+                <TwitterIcon/>
                 <span className="sr-only">Twitter</span>
-                <div className="h-6 w-6 bg-gray-400 rounded-full"></div>
+                <div className="h-6 w-6 bg-gray-100 rounded-full"></div>
               </Link>
-              <Link href="#" className="text-gray-400 hover:text-gray-500">
+              <Link href="https://linkedin.com/in/li-akash-pandey" className="text-gray-700 hover:text-gray-900">
+                <Linkedin/>
                 <span className="sr-only">LinkedIn</span>
-                <div className="h-6 w-6 bg-gray-400 rounded-full"></div>
+                <div className="h-6 w-6 bg-gray-100 rounded-full"></div>
               </Link>
-              <Link href="#" className="text-gray-400 hover:text-gray-500">
+              <Link href="https://github.com/Akash-YS05" className="text-gray-700 hover:text-gray-900">
+              <Github/>
                 <span className="sr-only">GitHub</span>
-                <div className="h-6 w-6 bg-gray-400 rounded-full"></div>
+                <div className="h-6 w-6 bg-gray-100 rounded-full"></div>
               </Link>
             </div>
           </div>
