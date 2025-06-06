@@ -7,6 +7,7 @@ import './globals.css'
 import Appbar from '@/components/Header'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from 'react-hot-toast'
+import { Analytics } from "@vercel/analytics/next"
 
 const bodoni_moda = Bodoni_Moda({
   subsets: ["latin"],
@@ -42,6 +43,7 @@ export default function RootLayout({
             <Appbar/>
             <Toaster position='bottom-right'/>
             {children}
+            <Analytics/>
           </ThemeProvider>
 
         </body>
