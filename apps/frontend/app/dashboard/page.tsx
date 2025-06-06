@@ -1,11 +1,13 @@
 "use client"
 import { useState, useMemo } from "react"
-import { ChevronDown, Globe, Plus, Search, Filter } from "lucide-react"
+import { ChevronDown, Globe, Plus, Search, Filter, ArrowUpRight, Trash2 } from "lucide-react"
 import { useWebsites } from "../hooks/useWebsites"
 import axios from "axios"
 import { BACKEND_API_URL } from "@/config"
 import { useAuth } from "@clerk/nextjs"
 import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
+import toast from "react-hot-toast"
 
 type UptimeStatus = "good" | "bad" | "unknown"
 
@@ -96,6 +98,8 @@ function CreateWebsiteModal({ isOpen, onClose }: { isOpen: boolean; onClose: (ur
   )
 }
 
+
+
 interface ProcessedWebsite {
   id: string
   url: string
@@ -106,7 +110,7 @@ interface ProcessedWebsite {
   responseTime: number
 }
 
-function WebsiteCard({ website }: { website: ProcessedWebsite }) {
+function WebsiteCard({ website, onDelete }: { website: ProcessedWebsite, onDelete: (id: string) => void }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const currentTime = new Date().toLocaleTimeString("en-US", {
     hour12: false,
@@ -211,6 +215,17 @@ function WebsiteCard({ website }: { website: ProcessedWebsite }) {
                 <UptimeChart ticks={website.uptimeTicks} />
               </div>
             </div>
+            <div className="flex">
+            <Link href={`${website.url}`} className="flex gap-1 border p-2 border-gray-200 rounded w-28 my-4 mx-4 cursor-pointer hover:bg-gray-100 hover:border-gray-300 duration-150">
+              <span className="text-gray-600 hover:text-gray-900">Visit Site</span>
+              <ArrowUpRight className="text-gray-600 hover:text-gray-900"/>
+            </Link>
+            <button className="flex gap-1 border p-2 border-red-200 items-center rounded w-36 my-4 mx-4 cursor-pointer hover:bg-red-100 hover:border-red-300 duration-150" onClick={() => onDelete(website.id)}>
+              <span className="text-red-500 hover:text-red-600">Delete Entry</span>
+              <Trash2 className="h-5 text-red-400 hover:text-red-600"/>
+            </button>
+            </div>
+            
           </motion.div>
         )}
       </AnimatePresence>
@@ -241,6 +256,28 @@ function App() {
   const { websites, refreshWebsites } = useWebsites()
   const { getToken } = useAuth()
 
+  async function  handleDelete(id: string) {
+    const deleteToast = toast.loading("Deleting website...");
+  
+    try {
+      const token = await getToken();
+      await axios.delete(`${BACKEND_API_URL}/api/v1/website`, {
+        headers: {
+          Authorization: token,
+        },
+        params: {
+          website: id
+        }
+      })
+
+      toast.success("Website deleted successfully", { id: deleteToast })
+      refreshWebsites()
+    } catch(err) {
+      toast.error("Failed to delete website", { id: deleteToast });
+      console.error("Deletion error", err);
+
+    }
+  }
   const processedWebsites = useMemo(() => {
     return websites.map((website) => {
       // Sort ticks by creation time
@@ -403,7 +440,7 @@ function App() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
               >
-                <WebsiteCard website={website} />
+                <WebsiteCard key={website.id} website={website} onDelete={handleDelete} />
               </motion.div>
             ))
           )}

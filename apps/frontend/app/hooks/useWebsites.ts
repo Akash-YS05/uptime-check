@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 interface Website {
     id: string;
     url: string;
+    disabled: boolean;
     ticks: {
         id: string;
         status: string;
@@ -38,8 +39,12 @@ export function useWebsites() {
                     Authorization: token
                 }
             });
+
+            const enabledWebsites = response.data.websites.filter(
+                (website: Website) => !website.disabled
+            )
     
-            setWebsites(response.data.websites);
+            setWebsites(enabledWebsites);
         } catch (err) {
             console.error('Error fetching websites:', err);
             setError(err instanceof Error ? err.message : 'Failed to fetch websites');

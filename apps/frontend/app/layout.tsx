@@ -6,6 +6,7 @@ import { Inter, Bodoni_Moda } from 'next/font/google'
 import './globals.css'
 import Appbar from '@/components/Header'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from 'react-hot-toast'
 
 const bodoni_moda = Bodoni_Moda({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Appbar/>
+            <Toaster position='bottom-right'/>
             {children}
           </ThemeProvider>
 
