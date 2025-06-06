@@ -25,10 +25,8 @@ const COST_PER_VALIDATION = 100; // in lamports
 
 Bun.serve({
     fetch(req, server) {
-      if (server.upgrade(req)) {
-        return;
-      }
-      return new Response("Upgrade failed", { status: 500 });
+      if (server.upgrade(req)) return;
+      return new Response("Hub is running"); // work around 
     },
     port: process.env.PORT || 8081,
     websocket: {
