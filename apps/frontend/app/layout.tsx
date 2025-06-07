@@ -21,7 +21,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Status - Website Uptime Monitoring",
+  title: "UpDog - Website Uptime Monitoring",
   description: "Real-time alerts when your websites experience downtime",
 }
 

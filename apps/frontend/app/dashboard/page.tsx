@@ -172,15 +172,15 @@ function WebsiteCard({ website, onDelete }: { website: ProcessedWebsite, onDelet
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Response Time:</span>
-                      <span className="text-sm font-medium">{website.responseTime}ms</span>
+                      <span className="text-sm text-gray-400 font-medium">{website.responseTime}ms</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Uptime:</span>
-                      <span className="text-sm font-medium">{website.uptimePercentage.toFixed(2)}%</span>
+                      <span className="text-sm text-gray-400 font-medium">{website.uptimePercentage.toFixed(2)}%</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Last Check:</span>
-                      <span className="text-sm font-medium">just now</span>
+                      <span className="text-sm text-gray-400 font-medium">just now</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Status:</span>
@@ -351,7 +351,7 @@ function App() {
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl font-bold text-gray-900 font-[Bodoni_Moda]">Your Status Dashboard</h1>
+            <h1 className="text-3xl font-bold text-gray-900 font-[Bodoni_Moda]">Your Dashboard</h1>
             <div className="flex items-center space-x-4">
               
               <motion.button
@@ -455,25 +455,33 @@ function App() {
             return
           }
 
-          const token = await getToken()
-          setIsModalOpen(false)
-          axios
-            .post(
+          const token = await getToken();
+          setIsModalOpen(false);
+
+          if (!token) {
+            toast.error("Please sign in to add a website.");
+            return;
+          }
+
+          try {
+            await axios.post(
               `${BACKEND_API_URL}/api/v1/website`,
-              {
-                url,
-              },
+              { url },
               {
                 headers: {
                   Authorization: token,
                 },
-              },
-            )
-            .then(() => {
-              refreshWebsites()
-            })
+              }
+            );
+            toast.success("Website added successfully");
+            refreshWebsites();
+          } catch (error) {
+            console.error("Error adding website:", error);
+            toast.error("Failed to add website.");
+          }
         }}
       />
+
     </div>
   )
 }

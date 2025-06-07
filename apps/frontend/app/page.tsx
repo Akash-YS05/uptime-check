@@ -7,6 +7,7 @@ import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* <header className="py-6 px-4 sm:px-6 lg:px-8 border-b backdrop-blur-sm bg-white/70 sticky top-0 z-50">
@@ -57,22 +58,22 @@ export default function Home() {
               <div className="text-left max-w-xl mx-auto lg:mx-0">
                 <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-sm font-light mb-6">
                   <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-                  Website monitoring made simple
+                  Whats UpDog?
                 </div>
-                <h1 className="text-4xl sm:text-5xl leading-16 md:text-6xl font-extralight tracking-tight mb-6">
+                <h1 className="text-5xl text-center sm:text-5xl leading-16 md:text-6xl font-extralight tracking-tight mb-6">
                   Powering Reliable Web with {" "}
                   <span className="text-transparent font-[Bodoni_Moda] bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
                   Validator-Driven {" "}
                   </span>
                   Monitoring
                 </h1>
-                <p className="text-lg sm:text-xl font-light text-gray-600 mb-8">
+                <p className="text-lg sm:text-xl text-center font-light text-gray-600 mb-8">
                 Community-powered uptime verification. Validators monitor websites, verify results with cryptographic signatures, and earn Solana for every valid check. Decentralized. Scalable. Rewarding.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <div className="flex flex-col justify-center items-center sm:flex-row gap-4 mb-8">
                   <Link
                     href="/dashboard"
-                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 font-light text-sm hover:opacity-90 transition-all shadow-lg shadow-blue-600/20 text-white"
+                    className="px-6 py-3 rounded-lg w-40 text-center bg-gradient-to-r from-purple-600 to-blue-600 font-light text-sm hover:opacity-90 transition-all shadow-lg shadow-blue-600/20 text-white"
                     onClick={() => {
                       router.push('/dashboard')
                     }}
@@ -81,7 +82,7 @@ export default function Home() {
                   </Link>
                   <Link
                     href="#"
-                    className="px-6 py-3 rounded-lg border border-gray-200 text-sm font-light hover:bg-gray-50 transition-colors"
+                    className="px-6 py-3 rounded-lg border border-gray-300 w-40 text-center text-sm font-light hover:bg-gray-50 transition-colors"
                   >
                     Learn more
                   </Link>
@@ -97,6 +98,8 @@ export default function Home() {
                       src="/hero-ss.png"
                       alt="Monitr dashboard preview"
                       className="rounded-md"
+                      width={800}
+                      height={800}
                     />
                   </div>
                 </div>
@@ -215,7 +218,7 @@ export default function Home() {
                   How it works
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight font-[Bodoni_Moda] mb-4">How Status works</h2>
+              <h2 className="text-3xl sm:text-4xl font-normal tracking-tight font-[Bodoni_Moda] mb-4">How It works</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
                 Setting up monitoring for your websites takes less than 5 minutes.
               </p>
@@ -389,7 +392,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl sm:text-4xl font-normal tracking-tight mb-4 font-[Bodoni_Moda]">Frequently asked questions</h2>
               <p className="text-gray-600 font-light max-w-2xl mx-auto">
-                Find answers to common questions about Status.
+                Find answers to common questions about UpDog.
               </p>
             </div>
 
