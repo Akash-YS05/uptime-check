@@ -1,84 +1,137 @@
-# Turborepo starter
+# What's UpDog?
 
-This Turborepo starter is maintained by the Turborepo core team.
+A decentralized website uptime monitoring system built with TypeScript, Solana blockchain integration, and real-time WebSocket communication. The system uses a network of validators to check website availability and stores results in a distributed manner.
 
-## Using this example
+ <p align="center">
+    <br />
+    ·
+    <a href="https://up-dog.vercel.app">Website</a>
+    ·
+    <a href="https://github.com/Akash-YS05/uptime-check">Github</a>
+    ·
+  </p>
 
-Run the following command:
+## Architecture
 
-```sh
-npx create-turbo@latest
+The system consists of three main components:
+
+- **API Server** - REST API for managing websites and retrieving monitoring data
+- **Hub Server** - WebSocket coordinator that manages validators and distributes monitoring tasks
+- **Validator Nodes** - Distributed nodes that perform actual website checks
+- **Frontend** - Next.js frontend for UI 
+
+## ✨ Features
+
+- 🌐 **Decentralized Monitoring** - Multiple validators check each website for reliability
+- 🔐 **Solana Integration** - Cryptographic signatures ensure validator authenticity
+- 📊 **Real-time Updates** - WebSocket-based communication for instant results
+- 💰 **Incentive System (Upcoming)** - Validators earn rewards for monitoring services
+- 🔒 **JWT Authentication** - Secure API access with token-based auth
+- 📈 **Performance Tracking** - Latency measurement and status history
+- 🚀 **High Performance** - Built with Bun runtime for optimal speed
+
+## 🛠️ Tech Stack
+
+- **Runtime**: [Bun](https://bun.sh) - Fast JavaScript runtime
+- **Backend**: Express.js with TypeScript
+- **Database**: Prisma ORM (database agnostic)
+- **Blockchain**: Solana Web3.js
+- **WebSockets**: Native Bun WebSocket support
+- **Cryptography**: TweetNaCl for message signing
+- **Authentication**: JWT with RSA public key verification
+
+## 📋 Prerequisites
+
+- [Bun](https://bun.sh) v1.2.13 or higher
+- Node.js (for compatibility)
+- Database (PostgreSQL, MySQL, or SQLite)
+- Solana wallet for validator nodes
+
+## 🚀 Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/uptime-monitor.git
+cd uptime-monitor
 ```
 
-## What's inside?
+### 2. Install Dependencies
 
-This Turborepo includes the following packages/apps:
+```bash
+# Install dependencies for all apps
+bun install
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+# Or install individually
+cd apps/api && bun install
+cd apps/hub && bun install
+cd apps/validator && bun install
 ```
 
-### Develop
+### 3. Environment Setup
 
-To develop all apps and packages, run the following command:
+Create `.env` files in each app directory:
 
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+#### API Server (`apps/api/.env`)
+```env
+PORT=3001
+JWT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+MIIBI....
+-----END PUBLIC KEY-----"
+DATABASE_URL="your_database_connection_string"
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+#### Hub Server (`apps/hub/.env`)
+```env
+PORT=8081
+DATABASE_URL="your_database_connection_string"
 ```
 
-## Useful Links
+#### Validator (`apps/validator/.env`)
+```env
+PORT=3000
+PRIVATE_KEY="[1,2,3,...,64]"  # Solana keypair as JSON array
+HUB_URL="ws://localhost:8081"  # or wss://your-hub-domain.com
+```
 
-Learn more about the power of Turborepo:
+## 🏛️ System Architecture
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Client App    │───▶│   API Server    │───▶│    Database     │
+│  (Frontend)     │    │  (Express.js)   │    │   (Prisma)      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                │
+                                ▼
+                       ┌─────────────────┐
+                       │   Hub Server    │
+                       │  (WebSocket)    │
+                       └─────────────────┘
+                                │
+                                ▼
+                    ┌───────────────────────────┐
+                    │      Validator Network     │
+                    │  ┌─────┐ ┌─────┐ ┌─────┐  │
+                    │  │ V1  │ │ V2  │ │ V3  │  │
+                    │  └─────┘ └─────┘ └─────┘  │
+                    └───────────────────────────┘
+```
+
+## 🔐 Security Features
+
+- **Cryptographic Signatures**: All validator communications are signed using Ed25519
+- **JWT Authentication**: Secure API access with RSA public key verification
+- **Message Verification**: Hub verifies all validator responses
+- **Timeout Protection**: Prevents hanging connections and callbacks
+- **Input Validation**: Sanitized inputs and proper error handling
+
+## 🚦 Monitoring Flow
+
+1. **Website Registration**: Users add websites via API
+2. **Task Distribution**: Hub distributes monitoring tasks to validators
+3. **Validation**: Validators check websites and measure latency
+4. **Response Signing**: Validators sign their responses cryptographically
+5. **Verification**: Hub verifies signatures and stores results
+6. **Reward Distribution**: Validators earn rewards for successful checks
+---
+**And that's all folks!**
